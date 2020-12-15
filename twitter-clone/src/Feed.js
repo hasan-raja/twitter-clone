@@ -1,82 +1,42 @@
-import React/* ,{useState ,useEffect } */ from 'react'
-import './Feed.css';
+import React, { useState, useEffect } from "react";
+import TweetBox from "./TweetBox";
+import Post from "./Post";
+import "./Feed.css";
+import db from "./firebase";
+import FlipMove from "react-flip-move";
 
-import TweetBox from './TweetBox';
-import Post from './Post';
-import firebase from "./firebase";
-// import FlipMove from './react-flip-move';
+function Feed() {
+  const [posts, setPosts] = useState([]);
 
+  useEffect(() => {
+    db.collection("posts").onSnapshot((snapshot) =>
+      setPosts(snapshot.docs.map((doc) => doc.data()))
+    );
+  }, []);
 
+  return (
+    <div className="feed">
+      <div className="feed__header">
+        <h2>Home</h2>
+      </div>
 
-class Feed extends React.Component {
-    constructor(){
-        super()
-        this.state={
-            
-            displayName:'',
-            username:'',
-            verified:'',
-            text:'',
-            image:'',
-            avatar:''
+      <TweetBox />
 
-        }
-    }
-
-    componentDidMount = async () => {
-       
-        const user= firebase.database().ref('post/');
-        
-        user.once('value',(snapShot)=>{
-        
-        snapShot.forEach(childSnapshot=>{
-            
-        this.setState({
-          
-          displayName:`${childSnapshot.val().displayName}`,
-          username:`${childSnapshot.val().username}`,
-          verified:`${childSnapshot.val().verified}`,
-          text:`${childSnapshot.val().text}`,
-          image:`${childSnapshot.val().image}`,
-          avatar:`${childSnapshot.val().avatar}`,
-           }/* ,()=>{
-               console.log(this.state);
-           } */)})
-        })
-      
-        
-      }
-      shouldComponentUpdate() {
-        return true;
-      }
-   
-    
-    render() {
-        return (
-        <div className='feed'>
-            {/* Header */}
-            <div className="feed__header">
-                <h2>Home</h2>
-            </div>
-
-            {/* TweetBox */}
-            <TweetBox />
-
-            {/* Post */}
-            {/* <FlipMove> */}
-              <Post 
-                //key={this.state.text}
-                displayName={this.state.displayName}
-                username={this.state.username}
-                verified={this.state.verified}
-                /* timestamp, */
-                text={this.state.text}
-                image={this.state.image}
-                avatar={this.state.avatar}/> 
-            {/* </FlipMove> */}
-        </div>
-    )
-    }
+      <FlipMove>
+        {posts.map((post) => (
+          <Post
+            key={post.text}
+            displayName={post.displayName}
+            username={post.username}
+            verified={post.verified}
+            text={post.text}
+            avatar={post.avatar}
+            image={post.image}
+          />
+        ))}
+      </FlipMove>
+    </div>
+  );
 }
 
 export default Feed;

@@ -7,9 +7,9 @@ import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
 import PublishIcon from "@material-ui/icons/Publish";
 
 import './Post.css';
-//import { db } from './firebase';
 
-const Post = forwardRef(
+
+const Post  = forwardRef(
     ({ displayName, username, verified, text, image, avatar },) => {
         //console.log(displayName);
       return (

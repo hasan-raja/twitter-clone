@@ -1,116 +1,60 @@
-import React,{useState} from 'react';
+import React, { useState } from "react";
+import "./TweetBox.css";
+import { Avatar, Button } from "@material-ui/core";
+import db from "./firebase";
 
-import './TweetBox.css';
-
-import {Avatar ,Button} from '@material-ui/core';
-
-import {db} from './firebase'
 function TweetBox() {
+  const [tweetMessage, setTweetMessage] = useState("");
+  const [tweetImage, setTweetImage] = useState("");
 
-    const [tweetMessage,setTweetMessage]= useState("")
-    const [tweetImage,setTweetImage]= useState("")
+  const sendTweet = (e) => {
+    e.preventDefault();
 
-    const sendTweet = async(e) =>{
-        e.preventDefault();
-        
-        const  displayName= "Ajmal-Hasan-Raja";
-        const username= "hasan21";
-        const verified= true;
-         const text= tweetMessage;
-        const image= tweetImage;
-        const  avatar=
-            "https://kajabi-storefronts-production.global.ssl.fastly.net/kajabi-storefronts-production/themes/284832/settings_images/rLlCifhXRJiT0RoN2FjK_Logo_roundbackground_black.png";
-        
+    db.collection("posts").add({
+      displayName: "Ajmal Hasan Raja",
+      username: "hasan21",
+      verified: true,
+      text: tweetMessage,
+      image: tweetImage,
+      avatar:
+        "photo_2020-01-13_15-47-20.jpg",
+    });
 
-        await db({displayName, username, verified, text, image, avatar})
+    setTweetMessage("");
+    setTweetImage("");
+  };
 
-        setTweetMessage("");
-        setTweetImage("");
-    }
-
-    // db(sendTweet());
-    return (
-        <div className="tweetBox">
-            <form>
-                <div className="tweetBox__input">
-                    {/* <Avatar src="https://kajabi-storefronts-production.global.ssl.fastly.net/kajabi-storefronts-production/themes/284832/settings_images/rLlCifhXRJiT0RoN2FjK_Logo_roundbackground_black.png"></Avatar> */}
-                    <Avatar src="photo_2020-01-13_15-47-20.jpg"></Avatar>
-                    <input
-                    onChange={e=>setTweetMessage(e.target.value)} 
-                    value={tweetMessage} placeholder="What's happening" type="text"></input>
-                </div>
-                <input
-                    onChange={e=>setTweetImage(e.target.value)} 
-                    value={tweetImage}
-                    className="tweetBox__imageInput"
-                    placeholder="Optional:Enter image Url"
-                    type="text"
-                />
-                <Button onClick={sendTweet} type="submit" className="tweetBox__tweetButton">Tweet</Button>
-            </form>
+  return (
+    <div className="tweetBox">
+      <form>
+        <div className="tweetBox__input">
+          <Avatar src="photo_2020-01-13_15-47-20.jpg"/>
+          <input
+            onChange={(e) => setTweetMessage(e.target.value)}
+            value={tweetMessage}
+            placeholder="What's happening?"
+            type="text"
+          />
         </div>
-    )
+        <input
+          value={tweetImage}
+          onChange={(e) => setTweetImage(e.target.value)}
+          className="tweetBox__imageInput"
+          placeholder="Optional: Enter image URL"
+          type="text"
+        />
+
+        <Button
+          onClick={sendTweet}
+          type="submit"
+          className="tweetBox__tweetButton"
+        >
+          Tweet
+        </Button>
+      </form>
+    </div>
+  );
 }
 
-export default TweetBox
-
-// import React, { useState } from "react";
-// import "./TweetBox.css";
-// import { Avatar, Button } from "@material-ui/core";
-// import db from "./firebase";
-
-// function TweetBox() {
-//   const [tweetMessage, setTweetMessage] = useState("");
-//   const [tweetImage, setTweetImage] = useState("");
-
-//   const sendTweet = (e) => {
-//     e.preventDefault();
-
-//     db.collection("posts").add({
-//       displayName: "Rafeh Qazi",
-//       username: "cleverqazi",
-//       verified: true,
-//       text: tweetMessage,
-//       image: tweetImage,
-//       avatar:
-//         "https://kajabi-storefronts-production.global.ssl.fastly.net/kajabi-storefronts-production/themes/284832/settings_images/rLlCifhXRJiT0RoN2FjK_Logo_roundbackground_black.png",
-//     });
-
-//     setTweetMessage("");
-//     setTweetImage("");
-//   };
-
-//   return (
-//     <div className="tweetBox">
-//       <form>
-//         <div className="tweetBox__input">
-//           <Avatar src="https://kajabi-storefronts-production.global.ssl.fastly.net/kajabi-storefronts-production/themes/284832/settings_images/rLlCifhXRJiT0RoN2FjK_Logo_roundbackground_black.png" />
-//           <input
-//             onChange={(e) => setTweetMessage(e.target.value)}
-//             value={tweetMessage}
-//             placeholder="What's happening?"
-//             type="text"
-//           />
-//         </div>
-//         <input
-//           value={tweetImage}
-//           onChange={(e) => setTweetImage(e.target.value)}
-//           className="tweetBox__imageInput"
-//           placeholder="Optional: Enter image URL"
-//           type="text"
-//         />
-
-//         <Button
-//           onClick={sendTweet}
-//           type="submit"
-//           className="tweetBox__tweetButton"
-//         >
-//           Tweet
-//         </Button>
-//       </form>
-//     </div>
-//   );
-// }
-
-// export default TweetBox;
+export default TweetBox;
 
